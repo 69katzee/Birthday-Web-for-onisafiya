@@ -43,22 +43,29 @@ body {
 }
 
 .gift {
-    font-size: 80px;
+    font-size: 85px;
     cursor: pointer;
     animation: bounce 2s infinite;
 }
 
 @keyframes bounce {
     0%,100% {transform: translateY(0);}
-    50% {transform: translateY(-10px);}
+    50% {transform: translateY(-12px);}
 }
 
 .clue {
     font-size: 14px;
     opacity: 0.8;
+    margin-top: 5px;
 }
 
-/* BALLOON (OPTIMIZED) */
+.message {
+    margin-top: 20px;
+    min-height: 40px;
+    font-size: 18px;
+}
+
+/* 🎈 BALLOON */
 .balloon {
     position: absolute;
     width: 40px;
@@ -91,22 +98,8 @@ body {
 }
 
 @keyframes floatUp {
-    0% {
-        transform: translateY(0);
-        opacity: 1;
-    }
-    80% {
-        opacity: 1;
-    }
-    100% {
-        transform: translateY(-120vh);
-        opacity: 0;
-    }
-}
-
-.message {
-    margin-top: 15px;
-    min-height: 40px;
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-120vh); opacity: 0; }
 }
 </style>
 </head>
@@ -127,9 +120,10 @@ body {
 
 <script>
 
-let musicStarted = false;
-let balloonCount = 0;
-const MAX_BALLOONS = 20; //  LIMIT TO PREVENT LAG
+let canClick = true;          // ⏱️ click cooldown
+let musicStarted = false;     // 🎵 music control
+let balloonCount = 0;         // 🎈 limit
+const MAX_BALLOONS = 18;
 
 function startMusic(){
     if(!musicStarted){
@@ -138,8 +132,8 @@ function startMusic(){
     }
 }
 
-const message = "Happy Birthday Auni 🎉, hang classmate pertama aku bagi wish birthday guna Website💖, and suprisingly aku sempat buat web ni dalam masa 1 malam, please rate my Website, nanti aku bagi RM10 hari isnin";
-
+/* 🎉 MESSAGE */
+const message = "Happy Birthday Auni 🎉 Hang classmate pertama aku wish Birthday guna Website💖 and suprisingly aku sempat buat web ni dlm masa 1 malam, so please rate Website ni, nanti aku bagi la RM10";
 let i = 0;
 
 function typeText(){
@@ -150,10 +144,10 @@ function typeText(){
     }
 }
 
-/* 🎈 OPTIMIZED BALLOON SYSTEM */
+/* 🎈 BALLOONS */
 function createBalloon(){
 
-    if(balloonCount >= MAX_BALLOONS) return; // stop lag
+    if(balloonCount >= MAX_BALLOONS) return;
 
     balloonCount++;
 
@@ -163,12 +157,11 @@ function createBalloon(){
     b.style.left = Math.random() * 100 + "vw";
     b.style.background = randomColor();
 
-    const duration = 6 + Math.random() * 4;
+    let duration = 5 + Math.random() * 4;
     b.style.animationDuration = duration + "s";
 
     document.body.appendChild(b);
 
-    // ✅ CLEAN REMOVAL (no memory leak)
     setTimeout(() => {
         b.remove();
         balloonCount--;
@@ -180,27 +173,34 @@ function randomColor(){
     return colors[Math.floor(Math.random() * colors.length)];
 }
 
-/* GIFT CLICK */
+/*  MAIN CLICK */
 function openGift(){
+
+    //  CLICK LIMIT (3 sec)
+    if(!canClick) return;
+    canClick = false;
 
     startMusic();
 
     confetti({
-        particleCount: 250,
-        spread: 140,
+        particleCount: 280,
+        spread: 150,
         origin: { y: 0.6 }
     });
 
-    //  controlled burst (no spam lag)
-    let delay = 0;
-    for(let i=0;i<12;i++){
-        setTimeout(createBalloon, delay);
-        delay += 200;
+    //  controlled spawn (no lag)
+    for(let i=0;i<10;i++){
+        setTimeout(createBalloon, i * 180);
     }
 
+    //  typing message
     document.getElementById("text").innerHTML = "";
     i = 0;
     typeText();
+
+    setTimeout(() => {
+        canClick = true;
+    }, 3000);
 }
 
 </script>
