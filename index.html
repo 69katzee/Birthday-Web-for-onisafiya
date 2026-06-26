@@ -3,153 +3,107 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Birthday 🎂</title>
+<title>Birthday Surprise 🎂</title>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Segoe UI',sans-serif;
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial;
+    overflow: hidden;
+    background: linear-gradient(-45deg, #ff4d8d, #6a5cff, #00d4ff, #ffcc00);
+    background-size: 400% 400%;
+    animation: gradient 10s ease infinite;
 }
 
-body{
-    height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:linear-gradient(135deg,#0f172a,#1e293b);
-    overflow:hidden;
+@keyframes gradient {
+    0% {background-position:0% 50%}
+    50% {background-position:100% 50%}
+    100% {background-position:0% 50%}
 }
 
-.card{
-    text-align:center;
-    padding:40px;
-    width:90%;
-    max-width:500px;
-
-    background:rgba(255,255,255,0.08);
-    backdrop-filter:blur(15px);
-    border:1px solid rgba(255,255,255,0.1);
-
-    border-radius:25px;
-    color:white;
-
-    animation:float 4s ease-in-out infinite;
+.card {
+    text-align: center;
+    background: rgba(255,255,255,0.1);
+    padding: 40px;
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    color: white;
+    box-shadow: 0 0 30px rgba(0,0,0,0.3);
+    width: 90%;
+    max-width: 500px;
 }
 
-h1{
-    font-size:3rem;
-    margin-bottom:10px;
+h1 {
+    font-size: 2.5rem;
 }
 
-p{
-    opacity:.8;
-    margin-bottom:25px;
+button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 15px;
 }
 
-button{
-    padding:14px 28px;
-    border:none;
-    border-radius:15px;
-    cursor:pointer;
-    font-size:1rem;
-
-    background:white;
-    color:#111827;
-
-    transition:.3s;
+.gift {
+    font-size: 60px;
+    cursor: pointer;
+    transition: transform 0.3s;
 }
 
-button:hover{
-    transform:scale(1.05);
+.gift:hover {
+    transform: scale(1.2);
 }
 
-.message{
-    margin-top:25px;
-    opacity:0;
-    transform:translateY(20px);
-    transition:1s;
-}
-
-.message.show{
-    opacity:1;
-    transform:translateY(0);
-}
-
-@keyframes float{
-    0%,100%{
-        transform:translateY(0px);
-    }
-    50%{
-        transform:translateY(-10px);
-    }
-}
-
-.bg-circle{
-    position:absolute;
-    border-radius:50%;
-    filter:blur(80px);
-}
-
-.c1{
-    width:250px;
-    height:250px;
-    background:#ff4d8d;
-    top:-50px;
-    left:-50px;
-}
-
-.c2{
-    width:300px;
-    height:300px;
-    background:#4f46e5;
-    bottom:-80px;
-    right:-80px;
+.message {
+    margin-top: 20px;
+    font-size: 18px;
+    min-height: 40px;
 }
 </style>
 </head>
+
 <body>
 
-<div class="bg-circle c1"></div>
-<div class="bg-circle c2"></div>
-
 <div class="card">
+    <div class="gift" onclick="openGift()">🎁</div>
+    <h1>Happy Birthday 🎂</h1>
 
-    <h1>🎂 Happy Birthday</h1>
-
-    <p>I made something special for you.</p>
-
-    <button onclick="openGift()">
-        Open Your Gift 🎁
-    </button>
-
-    <div id="msg" class="message">
-        <h2>✨ Happy Birthday!</h2>
-        <br>
-        <p>
-        YOOOO!! HAPPY BIRTHDAY! 
-        Thanks wei , hang orang pertama(kawan) yang aku wish guna website
-        </p>
-    </div>
-
+    <div class="message" id="text"></div>
 </div>
 
 <script>
-function openGift(){
+const message = "Happy Birthday Auni 🎉 Hope your day is full of happiness, laughter, and beautiful memories 💖";
 
+let i = 0;
+
+function typeText(){
+    if(i < message.length){
+        document.getElementById("text").innerHTML += message.charAt(i);
+        i++;
+        setTimeout(typeText, 50);
+    }
+}
+
+function openGift(){
     confetti({
-        particleCount:150,
-        spread:120,
-        origin:{y:0.6}
+        particleCount: 250,
+        spread: 120,
+        origin: { y: 0.6 }
     });
 
-    document.getElementById("msg").classList.add("show");
+    document.getElementById("text").innerHTML = "";
+    i = 0;
+    typeText();
 }
 </script>
-
 
 </body>
 </html>
